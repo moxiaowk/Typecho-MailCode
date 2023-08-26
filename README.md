@@ -47,7 +47,7 @@
             // 执行邮件发送请求
             $.ajax({
                 type: 'POST',
-                url: 'https://cx.mibor.cn/Email/sendemail.php',
+                url: '/Email/sendemail.php',
                 data: {
                     name: name,
                     email: email
@@ -75,7 +75,7 @@
                 // 执行验证码验证请求
                 $.ajax({
                     type: 'POST',
-                    url: 'https://cx.mibor.cn/Email/checking.php',
+                    url: '/Email/checking.php',
                     data: {
                         name: name,
                         email: email,
