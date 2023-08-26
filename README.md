@@ -145,6 +145,6 @@ $maxDailyUserSendLimit = 10; // 一天内单个用户的最大发信次数
 
 ### 致谢 Thanks
 
-特别感谢Tonm提供的初始版本，正是基于他的版本才有这个粗略的修改方案
+特别感谢Tonm提供的初始版本，正是基于他的版本才有这个粗略的修改和解决方案
 
-- [Tonm]((https://owo-bo.cn "原创者")
+- [Tonm](https://owo-bo.cn "基础代码原作者")
