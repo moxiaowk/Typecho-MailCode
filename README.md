@@ -124,7 +124,9 @@
 
 第三步
 
-你需要设置自己的smtp发件信息和每天发信的最大限制以及修改一下owo.php这个储存邮件内容的文件
+你需要设置自己的smtp发件信息和每天发信的最大限制以及修改一下owo.php这个储存邮件内容的文件，以及修改允许的请求域
+
+将sendmail.php里 $allowedOrigin = "https://sau.cc"; 域名改成自己的域名
 
 smtp发件信息在setup.php里改
 
