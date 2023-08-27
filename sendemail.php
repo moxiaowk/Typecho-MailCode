@@ -1,6 +1,42 @@
 <?php
 /* 发送邮件 sendemail.php */
 
+// 允许的前端域名
+$allowedOrigin = "https://sau.cc";
+
+// 设置允许的请求方法和请求头
+header("Access-Control-Allow-Origin: $allowedOrigin");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type");
+
+// 处理预检请求
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Origin: $allowedOrigin");
+    header("Access-Control-Allow-Methods: POST");
+    header("Access-Control-Allow-Headers: Content-Type");
+    exit;
+}
+
+// // 检查 Referer-如果要开启此项请把你的jQuery本地化
+// if ($_SERVER['HTTP_REFERER'] !== $allowedOrigin) {
+//     $error_response = array(
+//         "status" => null,
+//         "msg" => "Unauthorized Referer"
+//     );
+//     echo json_encode($error_response);
+//     exit;
+// }
+
+// 检查邮箱是否为空且是否包含 @ 和 .
+if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+    $error_response = array(
+        "status" => null,
+        "msg" => "Invalid Email Address"
+    );
+    echo json_encode($error_response);
+    exit;
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $error_response = array(
@@ -10,16 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode($error_response);
     exit;
 }
-
-if (empty($_POST['email'])) {
-    $error_response = array(
-        "status" => null,
-        "msg" => "Wrong Email Address"
-    );
-    echo json_encode($error_response);
-    exit;
-}
-
 
 require 'information.php';
 require 'max.php';
