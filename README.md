@@ -142,6 +142,77 @@ $maxDailyUserSendLimit = 10; // 一天内单个用户的最大发信次数
 
 ### 前端提交评论时没对验证码框进行校验，因为不同主题不一样，记得自己根据具体的主题修改一下防止被绕过
 
+### 防范恶意调用：
+
+鼓励你对该后端的api接口进行校验，以确保后端接口不被恶意调用，以下给出一个示例方法：
+
+前台生成一个签名，当需要访问接口的时候，把时间戳，随机数，签名通过URL或者post传递到后台。后台拿到时间戳，随机数后，通过一样的算法规则计算出签名，然后和传递过来的签名进行对比，一样的话，返回数据
+
+可以在comments.php加入前端算法，然后后端sendmail.php请求时对前端传来的签名和后端计算出来的签名进行校验，如果校验通过则允许此次邮件发送调用
+
+![示例图-来自CSDN](https://github.com/moxiaowk/Typecho-MailCode/assets/62387130/b5553269-b6a5-4c7f-9283-fc50c8dcfc0d)
+
+为防止前端包含算法的部分被破解，你可以用SG11扩展对修改后的comments.php文件进行加密，并且可以限制域名使用（你可以寻找互联网在线加密网站或者某宝商家等等方式加密，记得保留源文件以便之后可能修改）
+
+
+以下给出一段前端修改示例，这里需要CryptoJS 库，记得本地化引用
+
+```php
+// 引用CryptoJS 库
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+```
+
+```php
+// 计算字符串的MD5哈希
+function calculateMD5(str) {
+    return CryptoJS.MD5(str).toString();
+}
+
+// 计算签名
+function calculateSignature(xxx, xxx) {
+// 设计你自己的签名算法
+    return finalSignature;
+}
+
+// 计算时间戳的哈希
+function calculateTimestampHash() {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const md5Timestamp = calculateMD5(currentTimestamp.toString()).slice(1); // 删除前一位
+    return md5Timestamp;
+}
+
+// 预先计算签名和时间戳的哈希
+const signature = calculateSignature(xxx, xxx);
+const timestampHash = calculateTimestampHash();
+
+// 执行邮件发送请求
+$.ajax({
+    type: 'POST',
+    url: '/sendemail.php',
+    data: {
+        name: name,
+        email: email,
+        signature: signature,
+        timestamp: timestampHash
+    },
+    dataType: 'json',
+    success: function(response) {
+        if (response.msg === 'Email sent successfully') {
+            $('#msg-e').html('<span style="color: green;">邮件发送成功</span>');
+            $('#mail').prop('readonly', true);
+
+            // 等待邮件发送成功后，执行验证码验证
+            verifyCaptcha(name, email);
+        } else {
+            $('#msg-e').html('<span style="color: red;">邮件发送失败：' + response.msg + '</span>');
+        }
+    },
+    error: function() {
+        $('#msg-e').html('<span style="color: red;">发生错误，请重试</span>');
+    }
+});
+```
+
 
 ### 致谢 Thanks
 
